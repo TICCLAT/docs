@@ -127,7 +127,7 @@ The Conda documentation explains [how to modify your recipe to use SDK 10.9](htt
 
 1. Download the proper SDK, e.g. from phracker.
 2. Put it somewhere on your disk.
-3. Create another file in your recipe directory called `conda_build_config.yaml`.
+3. Create a file in your home directory called `conda_build_config.yaml` ([you can put it somewhere else if you like](https://conda.io/docs/user-guide/tasks/build-packages/variants.html#conda-build-variant-config-files), but don't put it in the recipe, conda-forge doesn't allow that).
 4. Add the `CONDA_BUILD_SYSROOT` configuration (see linked documentation).
 
 ### Submitting to conda-forge
