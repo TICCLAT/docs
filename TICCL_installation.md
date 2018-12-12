@@ -87,6 +87,10 @@ Also, it is important to properly separate the three classes of requirements/dep
 
 See the Conda documentation for [more on the different requirements sections](https://conda.io/docs/user-guide/tasks/build-packages/define-metadata.html#requirements-section).
 
+One more thing to consider when building libraries is [run exports (see documentation)](https://conda.io/docs/user-guide/tasks/build-packages/define-metadata.html#export-runtime-requirements).
+This allows downstream dependent recipes to pin versions of your package.
+In our libtar and TiCC Utils recipes, we had to add this.
+
 #### `build.sh`
 For C(++) packages, we still need to add a `build.sh` script containing the commands to compile the code.
 For instance, this could contain the commands given above for [building from source](#Manual-build-from-source).
