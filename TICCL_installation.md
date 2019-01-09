@@ -21,10 +21,10 @@ For including headers and linking to (i.e. library/run-time dependencies):
 - icu (``icu-dev``)
 - xml2 (``libxml2-dev``)
 - [TiCC Utils](https://github.com/LanguageMachines/ticcutils), which in turn depends on (in addition to the above build dependencies and also icu and xml2):
-    - Boost and Boost Regex (``libboost-dev`` and ``libboost-regex-dev``)
     - libtar (``libtar-dev``)
     - bz2 bindings (``libbz2-dev``)
     - zlib bindings (``zlib1g-dev``)
+    - optionally (necessary for gcc 4.8 and lower): Boost and Boost Regex (``libboost-dev`` and ``libboost-regex-dev``)
 
 ## Manual build from source
 
@@ -51,7 +51,7 @@ conda install ticcltools -c conda-forge
 This requires Conda to be installed, [Conda installation instructions can be found here](https://conda.io/docs/user-guide/install/index.html).
 
 ## Build a Conda package
-Of course, to installing from conda-forge, we had to build the Conda package and some of its dependencies.
+Of course, to allow installing from conda-forge, we had to build the Conda package and some of its dependencies.
 
 The recipes we wrote can be found in the conda-forge GitHub organization:
 - [autoconf-archive feedstock](https://github.com/conda-forge/autoconf-archive-feedstock)
@@ -95,6 +95,12 @@ In our libtar and TiCC Utils recipes, we had to add this.
 For C(++) packages, we still need to add a `build.sh` script containing the commands to compile the code.
 For instance, this could contain the commands given above for [building from source](#Manual-build-from-source).
 And indeed, this is what we do in the [TICCL Tools recipe `build.sh` script](https://github.com/TICCLAT/staged-recipes/blob/ticcltools/recipes/ticcltools/build.sh).
+In the TiCC Utils recipe build script, we also run `make check`.
+This turned out to be quite useful, as it revealed the necessity of building on GCC 7.2 instead of the default 4.8 when building without Boost (we couldn't get it to build with Boost).
+
+#### `conda_build_config.yaml`
+Sometimes, some additional configuration must be added in this file.
+For instance, in the [TiCC Utils recipe](https://github.com/TICCLAT/staged-recipes/blob/ticcutils/recipes/ticcutils/conda_build_config.yaml) we used it to switch compiler version to GCC 7.2.
 
 ### Building C(++) Conda recipes locally
 While writing and testing a Conda recipe, it is very convenient to first get it to build on your local machine (and, in fact, [the conda-forge guidelines strongly encourage this](https://conda-forge.org/docs/recipe.html#checklist) before making a PR).
@@ -109,11 +115,17 @@ For instance, if you're in the `staged-recipes` base folder, run it like:
 ```sh
 conda-build recipes/ticcltools
 ```
+In this specific case, actually this will not work, because the `ticcltools` recipe depends on conda-forge packages, so you need to specify the conda-forge channel for those:
+```sh
+conda-build recipes/ticcltools -c conda-forge
+```
 
+#### Clean-up and debugging
 Conda build by default cleans up after itself.
 However, during debugging, it can be useful to keep the temporary files that conda build created to see what went wrong in your build.
 Pass the `--dirty` flag to `conda-build` in that case.
 
+#### Install your local build
 After a successful build, the package will be stored in Conda's local cache.
 This is, again, really useful during development, because this means that you can now install the package from the "local channel" if you need it immediately (merging packages into conda-forge can take some time, as it is run by volunteers):
 ```sh
@@ -124,6 +136,26 @@ Alternatively, you could now upload the package to your own channel.
 The `conda-build` output tells you how to do this (create an account on Anaconda Cloud and follow instructions).
 That way others can also benefit from your build, if they are using the same operating system.
 
+#### `~/.condarc` channels
+To make your life easier, add a file called `~/.condarc` and put the following in it:
+```yaml
+channels:
+  - conda-forge
+  - defaults
+```
+With this, you no longer need to add the `-c conda-forge` option, like in the above `conda-build` command.
+It also specifies the search priority: packages will first be searched for in conda-forge and then in defaults (the official Anaconda channel).
+This is actually quite important for properly testing conda-forge builds on your local machine, because the real conda-forge builds on CI also use this search order.
+
+However, there is a downside: with this configuration, installing packages from the local repository doesn't work anymore like above with `-c local` ([see this comment](https://github.com/conda/conda/issues/7024#issuecomment-452733616)).
+The solution is to either again remove the channels list from `~/.condarc`, or to pay attention during `conda-build` to see where the local package is stored.
+Usually, this will be something like `$CONDA_PREFIX/conda_bld`.
+Then use that directory explicitly as the channel, possibly adding other channels like conda-forge after it (though those should be picked up from `~/.condarc`):
+```sh
+conda install ticcltools -c $CONDA_PREFIX/conda_bld -c conda-forge
+```
+
+
 #### macOS: XCode SDK version
 On macOS, when the code you're building links to system calls, you need to have the right version of the XCode SDK.
 The current conda-forge toolchain is based on SDK 10.9.
@@ -131,7 +163,7 @@ The Conda documentation explains [how to modify your recipe to use SDK 10.9](htt
 
 1. Download the proper SDK, e.g. from phracker.
 2. Put it somewhere on your disk.
-3. Create a file in your home directory called `conda_build_config.yaml` ([you can put it somewhere else if you like](https://conda.io/docs/user-guide/tasks/build-packages/variants.html#conda-build-variant-config-files), but don't put it in the recipe, conda-forge doesn't allow that).
+3. Create a file in your home directory called `conda_build_config.yaml` ([you can put it somewhere else if you like](https://conda.io/docs/user-guide/tasks/build-packages/variants.html#conda-build-variant-config-files), but don't put it in the recipe, conda-forge doesn't allow that, at least not for this macOS configuration, see GCC 7.2 remarks above).
 4. Add the `CONDA_BUILD_SYSROOT` configuration (see linked documentation).
 
 ### Submitting to conda-forge
