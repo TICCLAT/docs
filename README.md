@@ -5,4 +5,8 @@ Documentation and reporting on things done during the TICCLAT eScience project
 
 ## Contents
 
+* [TICCL](ticcl.md)
 * [TICCL Tools installation and instructions for building the Conda package](TICCL_installation.md)
+* [TICCLAT database design](database_design.md)
+* [Research questions](research_questions.md)
+* [Corpora](corpora.md)
