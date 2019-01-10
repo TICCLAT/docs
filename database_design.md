@@ -1,5 +1,9 @@
 # Database design
 
+![ticclat database design](img/ticclat.png "ticclat database design")
+
+(Diagram was created using draw.io - diagram file can be found in the `diagrams` directory.)
+
 ## Use cases
 
 * Spelling normalization
