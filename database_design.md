@@ -18,6 +18,13 @@
 
 ## Example/benchmark queries
 
+### Most important queries (these should be fast)
+
+* Given a wordform, give word frequencies per year
+* Given a wordform, in what corpora does it occur, with what frequencies
+
+### Other ideas
+
 * Aggregate over words in corpus (or arbitrary selection of texts)
 	- Word frequency list
 	- Tf idf(?)
