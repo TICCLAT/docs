@@ -88,6 +88,23 @@
 * Some lexicons contain noisy wordforms, e.g., `te(g)en`, and ticcl normally cleans those using ticcl-unk. How to deal with these forms?
 	- Hash them as they are
 	- Only add cleaned wordforms
+* Spelling correction lists contain correct (valid) and incorrect (invalid) wordforms, should we store both? Probably, yes. All wordforms (both correct ones and incorrect ones) should be connected to this lexicon.
+* Bidirectional self-referential relationships in ORM are complicated:
+	- https://docs.sqlalchemy.org/en/latest/orm/join_conditions.html#self-referential-many-to-many-relationship
+	- https://groups.google.com/forum/#!msg/sqlalchemy/Y18J7jHHJlg/f5ydw1T4gloJ
+	- It seems they only work in ORM when the two relationships between the objects have different names (e.g., left nodes and right nodes)
+	- Do we need the bidirectional relationship in ORM?
+		- This means that if you have get a wordform from the database, you can get all its related words by looking at the `links`.
+		- To me it seems just as easy to create a method that does two mysql queries whenever you need to get all related wordforms and then merge the results.
+	- Use case: we want to add a `wordform_link` for a new lexicon, we need to check whether the relationship is already in the database.
+		- If it is, we need to select it, and add an entry to `source_x_wordform_link`
+		- If it isn't, we need to add the link and then add an entry.
+		- Checking to see whether it exists, should be easy
+			- Say we add the constraint that wf_id_1 should be larger than wf_2_id
+			- For checking whether the link exists, we need both `wordform_id`s
+			- Another approach is to always add both links
+				- [This StackOverflow suggests to use a constraint](https://stackoverflow.com/questions/10807900/how-to-store-bidirectional-relationships-in-a-rdbms-like-mysql)
+		- [MySQL does not support CHECK constraints](https://stackoverflow.com/questions/2115497/check-constraint-in-mysql-is-not-working)
 
 ## Character set and collation
 
