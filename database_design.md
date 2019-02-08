@@ -105,6 +105,8 @@
 			- Another approach is to always add both links
 				- [This StackOverflow suggests to use a constraint](https://stackoverflow.com/questions/10807900/how-to-store-bidirectional-relationships-in-a-rdbms-like-mysql)
 		- [MySQL does not support CHECK constraints](https://stackoverflow.com/questions/2115497/check-constraint-in-mysql-is-not-working)
+		- I think I prefer the solution where both relationships are added (wf1, wf2) and (wf2, wf1)
+			- I think this means we can use the relationship and all words will be in there.
 
 ## Character set and collation
 
