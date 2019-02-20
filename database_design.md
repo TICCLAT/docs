@@ -107,6 +107,9 @@
 		- [MySQL does not support CHECK constraints](https://stackoverflow.com/questions/2115497/check-constraint-in-mysql-is-not-working)
 		- I think I prefer the solution where both relationships are added (wf1, wf2) and (wf2, wf1)
 			- I think this means we can use the relationship and all words will be in there.
+* The database design allows for multiple corpora for a document. Is this really required?
+	- If there was only a single corpus for each document, adding corpora would be faster, because we could use sql inserts instead of the ORM insert (which is slower) (for nlwiki: ~5 minutes for ORM vs. ~30 for sql inserts)
+	- A persistent identifier could make it easier (cheap) to check whether two documents are the same. Otherwise you'd have to look at the words and frequencies
 
 ## Character set and collation
 
