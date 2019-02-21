@@ -110,6 +110,10 @@
 * The database design allows for multiple corpora for a document. Is this really required?
 	- If there was only a single corpus for each document, adding corpora would be faster, because we could use sql inserts instead of the ORM insert (which is slower) (for nlwiki: ~5 minutes for ORM vs. ~30 for sql inserts)
 	- A persistent identifier could make it easier (cheap) to check whether two documents are the same. Otherwise you'd have to look at the words and frequencies
+* The elex list contains lemma, wordform pairs. Sometimes the wordform is the same as the lemma. I think in the database we will want to disallow wordforms to have a link to themself.
+* The OpenTaal word list contains multi word expressions (e.g., 't is dief en diefjesmaat) and words with punctuation (e.g., 's-Hertogenbosch). How to deal with those?
+	- The INL lexicon contains a structure for adding multiword expressions, should we use that?
+	- How to calculate the anahash for multiword expressions?
 
 ## Character set and collation
 
