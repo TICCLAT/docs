@@ -114,6 +114,7 @@
 * The OpenTaal word list contains multi word expressions (e.g., 't is dief en diefjesmaat) and words with punctuation (e.g., 's-Hertogenbosch). How to deal with those?
 	- The INL lexicon contains a structure for adding multiword expressions, should we use that?
 	- How to calculate the anahash for multiword expressions?
+	- Lemma's may not always be a valid word (or maybe they are by definition, I'm not sure)
 
 ## Character set and collation
 
