@@ -4,6 +4,8 @@
 
 (Diagram was created using draw.io - diagram file can be found in the `diagrams` directory.)
 
+This design is based on tables from the INT lexicon database design created in the IMPACT project ([link](http://ivdnt.org/images/stories/producten/IMPACT_215064_D-EE2.1_Lexicon%20structure_v3.0.pdf)).
+
 ## Use cases
 
 * Spelling normalization
@@ -52,7 +54,7 @@
 		- Document/corpora structure can be reused
 		- Lexical source structure can be reused
 			- We probably need to take into account metadata (time, location) for sources like this, but we ignore it for the time being.
-		- Worform
+		- Wordform
 			- Both the 'correct' and 'incorrect' wordforms are added to the wordform table. Incorrect wordforms can come from spelling correction lists and documents.
 				- Also, any source can (and will!) contain errors
 		- Text Attestation structure can be reused
@@ -62,7 +64,6 @@
 		- analysed_wordform is removed. We don't use it.
 		- token_attestations: We ignore word position in the documents, because we don't need it
 * Ignore capitals (all word(forms) are lowercase(d))
-	- In practice, TICCL already lowercases all text (as a preprocessing step)
 * Add table with anahash values
 	- id (primary key)
 	- wordform_id
