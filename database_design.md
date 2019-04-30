@@ -4,7 +4,7 @@
 
 (Diagram was created using draw.io - diagram file can be found in the `diagrams` directory.)
 
-This design is based on tables from the INT lexicon database design created in the IMPACT project ([link](http://ivdnt.org/images/stories/producten/IMPACT_215064_D-EE2.1_Lexicon%20structure_v3.0.pdf)).
+This design is based on tables from the INT lexicon database design created in the IMPACT project ([link](https://ivdnt.org/images/stories/onderzoek_en_onderwijs/publicaties/impact/impact_lexicon_structure.pdf)).
 
 ## Use cases
 
