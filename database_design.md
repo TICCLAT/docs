@@ -80,6 +80,23 @@ This design is based on tables from the INT lexicon database design created in t
 	- id (primary key)
 	- wordform_link_id
 	- source_id (source is lexicon)
+* Add table for morphological paradigms
+	- We decided it is best to have a separate table for the morphological links, because
+		- the links are implicit in the codes (so no explicit links between two words, but words with the same code belong to the same paradigm)
+		- the morphological links data comes from several combined lexical resources (so that doesn't fit the current generic schema)
+		- the morphological links have additional metadata
+	- Table structure:
+		- combined primary key of component codes: Z, Y, X, W, V
+		- wordform_id
+		- pos
+		- word_type_code
+* Add table for external links
+	- We'd like to be able to link the wordforms in ticclat to external sources, such as the WNT
+	- Table structure:
+		- external_link_id
+    	- wordform_id
+		- source_name
+		- source_id
 
 ## Issues
 
