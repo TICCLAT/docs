@@ -104,3 +104,6 @@ venv.bak/
 .mypy_cache/
 
 ENVVARS.txt
+
+# Mac stuff
+.DS_Store
